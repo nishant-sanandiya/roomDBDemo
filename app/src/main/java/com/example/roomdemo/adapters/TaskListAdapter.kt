@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.roomdemo.data_classes.TaskItem
+import com.example.roomdemo.database.models.TaskItem
 import com.example.roomdemo.R
 
 class TaskListAdapter(private val data: List<TaskItem>) :
