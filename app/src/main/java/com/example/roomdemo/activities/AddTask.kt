@@ -1,19 +1,27 @@
 package com.example.roomdemo.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.roomdemo.database.db.TaskDatabase
+import com.example.roomdemo.database.application.TasksApplication
 import com.example.roomdemo.database.models.TaskItem
 import com.example.roomdemo.databinding.ActivityAddTaskBinding
 import com.example.roomdemo.utils.KeyboardUtils
+import com.example.roomdemo.viewModal.TaskViewModal
+import com.example.roomdemo.viewModal.TaskViewModelFactory
 import kotlinx.coroutines.launch
+import java.util.*
 
 class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
 
     private lateinit var binding: ActivityAddTaskBinding
+    private val random = Random()
+
+    private val taskViewModel: TaskViewModal by viewModels {
+        TaskViewModelFactory((application as TasksApplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +62,13 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
         v?.let { KeyboardUtils.hideKeyboard(this, it) }
     }
 
+    private fun getRandomNumber (from: Int, to: Int):Int {
+        return random.nextInt(to - from) + from
+    }
+
     private fun addTaskHandler(title: String) {
         lifecycleScope.launch {
-            TaskDatabase.getDatabase(this@AddTask).taskDao().addTask(TaskItem(20, title))
+            taskViewModel.insert(TaskItem(getRandomNumber(0,150), title))
             this@AddTask.finish()
         }
     }

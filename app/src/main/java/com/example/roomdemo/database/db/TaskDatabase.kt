@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import com.example.roomdemo.database.dao.TaskDao
 import com.example.roomdemo.database.models.TaskItem
 
-// Annotates class to be a Room Database with a table (entity) of the Word class
 @Database(entities = [TaskItem::class], version = 1, exportSchema = true)
 public abstract class TaskDatabase: RoomDatabase() {
 
