@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), BaseActivity, View.OnClickListener {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun uiBinding() {
-        val adapter = TaskListAdapter(listDataArray)
+        val adapter = TaskListAdapter(listDataArray,this)
         binding.taskListRecyclerView.adapter = adapter
         binding.taskListRecyclerView.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), BaseActivity, View.OnClickListener {
         taskViewModel.allTasks.observe(this, Observer { tasks ->
             tasks?.let {
                 listDataArray = (it as MutableList<TaskItem>)
-                val adapter = TaskListAdapter(it)
+                val adapter = TaskListAdapter(it,this)
                 binding.taskListRecyclerView.adapter = adapter
                 binding.taskListRecyclerView.adapter?.notifyDataSetChanged()
             }

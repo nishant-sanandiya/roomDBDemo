@@ -1,7 +1,9 @@
 package com.example.roomdemo.activities
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +20,7 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
 
     private lateinit var binding: ActivityAddTaskBinding
     private val random = Random()
+    private var editableId : Int ?= null
 
     private val taskViewModel: TaskViewModal by viewModels {
         TaskViewModelFactory((application as TasksApplication).repository)
@@ -34,7 +37,6 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
     }
 
     override fun uiBinding() {
-
     }
 
     override fun attachListners() {
@@ -46,8 +48,15 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initData() {
-
+        val passTask = intent.extras?.get("task")
+        if(passTask != null){
+            val temp = passTask as TaskItem
+            binding.addTaskButton.text = "UPDATE TASK"
+            binding.editTextTextPersonName.setText(passTask.title)
+            editableId = passTask.id
+        }
     }
 
     override fun onClick(v: View?) {
@@ -62,8 +71,12 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
         v?.let { KeyboardUtils.hideKeyboard(this, it) }
     }
 
-    private fun getRandomNumber (from: Int, to: Int):Int {
-        return random.nextInt(to - from) + from
+    private fun getRandomNumber (from: Int, to: Int): Int {
+        if(editableId == null) {
+            return random.nextInt(to - from) + from
+        }else{
+            return editableId as Int
+        }
     }
 
     private fun addTaskHandler(title: String) {
