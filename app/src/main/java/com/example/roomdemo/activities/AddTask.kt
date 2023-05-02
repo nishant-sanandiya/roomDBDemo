@@ -20,7 +20,7 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
 
     private lateinit var binding: ActivityAddTaskBinding
     private val random = Random()
-    private var editableId : Int ?= null
+    private var editableTask: TaskItem? = null
 
     private val taskViewModel: TaskViewModal by viewModels {
         TaskViewModelFactory((application as TasksApplication).repository)
@@ -45,17 +45,20 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
     }
 
     override fun initActionbar() {
-
     }
 
     @SuppressLint("SetTextI18n")
     override fun initData() {
         val passTask = intent.extras?.get("task")
-        if(passTask != null){
+        if (passTask != null) {
             val temp = passTask as TaskItem
             binding.addTaskButton.text = "UPDATE TASK"
-            binding.editTextTextPersonName.setText(passTask.title)
-            editableId = passTask.id
+            binding.editTextTextPersonName.setText(temp.title)
+            editableTask = temp
+            Log.d("passTask", "$temp")
+            title = "Edit Task"
+        } else {
+            title = "Add Task"
         }
     }
 
@@ -71,17 +74,30 @@ class AddTask : AppCompatActivity(), BaseActivity, View.OnClickListener {
         v?.let { KeyboardUtils.hideKeyboard(this, it) }
     }
 
-    private fun getRandomNumber (from: Int, to: Int): Int {
-        if(editableId == null) {
+    private fun getRandomNumber(from: Int, to: Int): Int {
+        if (editableTask == null) {
             return random.nextInt(to - from) + from
-        }else{
-            return editableId as Int
+        } else {
+            return editableTask!!.id
+        }
+    }
+
+    private fun getTask(title: String): TaskItem {
+        if (editableTask != null) {
+            return TaskItem(
+                getRandomNumber(0, 150), title, editableTask?.time, Date().toString()
+            )
+        } else {
+            return TaskItem(
+                getRandomNumber(0, 150), title, Date().toString(), Date().toString()
+            )
         }
     }
 
     private fun addTaskHandler(title: String) {
         lifecycleScope.launch {
-            taskViewModel.insert(TaskItem(getRandomNumber(0,150), title))
+            val task = getTask(title)
+            taskViewModel.insert(task)
             this@AddTask.finish()
         }
     }

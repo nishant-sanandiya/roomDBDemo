@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
-    @Query("SELECT * FROM Task ORDER BY id DESC")
+    @Query("SELECT * FROM Task ORDER BY updatedAt DESC")
     fun getTaskList(): Flow<List<TaskItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -31,8 +31,7 @@ class TaskListAdapter(private val data: List<TaskItem>,private val context:Conte
         holder.editIconView.setOnClickListener {
             val item = data[position]
             Intent(context,AddTask::class.java).let{
-                val instance = TaskItem(item.id,item.title)
-                it.putExtra("task",instance)
+                it.putExtra("task",item)
                 context.startActivity(it)
             }
         }

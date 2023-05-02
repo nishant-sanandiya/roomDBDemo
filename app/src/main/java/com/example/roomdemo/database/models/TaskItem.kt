@@ -9,10 +9,14 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Task")
 data class TaskItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "title") val title: String?
+    @ColumnInfo(name = "title") val title: String?,
+    @ColumnInfo(name = "createdAt", defaultValue = "") val time: String?,
+    @ColumnInfo(name = "updatedAt", defaultValue = "") val updatedTime: String?,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString()
     ) {
     }
@@ -20,6 +24,8 @@ data class TaskItem(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
         parcel.writeString(title)
+        parcel.writeString(time)
+        parcel.writeString(updatedTime)
     }
 
     override fun describeContents(): Int {

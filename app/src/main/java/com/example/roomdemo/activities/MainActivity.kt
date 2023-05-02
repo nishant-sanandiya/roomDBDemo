@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -20,9 +19,7 @@ import com.example.roomdemo.databinding.ActivityMainBinding
 import com.example.roomdemo.utils.KeyboardUtils
 import com.example.roomdemo.viewModal.TaskViewModal
 import com.example.roomdemo.viewModal.TaskViewModelFactory
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 
 class MainActivity : AppCompatActivity(), BaseActivity, View.OnClickListener {
 
@@ -66,7 +63,7 @@ class MainActivity : AppCompatActivity(), BaseActivity, View.OnClickListener {
     }
 
     override fun initActionbar() {
-
+        title = "Task List"
     }
 
     override fun initData() {
